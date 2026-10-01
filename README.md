@@ -1,3 +1,24 @@
+https://roadmap.sh/projects/todo-list-api
+
+//Requirements
+You are required to develop a RESTful API with following endpoints
+
+User registration to create a new user
+
+Login endpoint to authenticate the user and generate a token
+
+CRUD operations for managing the to-do list
+
+Implement user authentication to allow only authorized users to access the to-do list
+
+Implement error handling and security measures
+
+Use a database to store the user and to-do list data (you can use any database of your choice)
+
+Implement proper data validation
+
+Implement pagination and filtering for the to-do list
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">

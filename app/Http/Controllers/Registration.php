@@ -42,7 +42,9 @@ class Registration extends Controller
             ], 401);
         }
 
+        $session = $user->createToken('auth_token')->plainTextToken;
         return response()->json([
+            "session" => $session,
             "message"=> "user exist",
            "user" =>$user
         ]);
