@@ -17,7 +17,8 @@ class TodoController extends Controller
 
     $todo = Todos::create([
         "title" => $data["title"],
-        "description" => $data["description"]
+        "description" => $data["description"],
+        "user_id" => auth()->user()->id
     ]);
 
    
@@ -29,5 +30,33 @@ class TodoController extends Controller
     ]);
 
 
+   }
+
+   public function update(Request $request, $id){
+        $data = $request->validate([
+
+        "title"=> "string",
+        "description"=> "string"]);
+
+        $todo = Todos::findOrFail($id);
+
+        $user= $request->user()->id;
+
+        if($user != $todo->user_id){
+            return response()->json([
+                "message" => "unauthorized"
+            ],403);
+        }
+
+        $todo->update([
+            "title" => $data["title"],
+            "description"=> $data["description"],
+        ]);
+
+        return response()->json([
+            "id"=> $todo->id,
+            "title" => $todo->title,
+            "description"=> $todo->description
+        ]);
    }
 }

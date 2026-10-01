@@ -16,7 +16,8 @@ Route::get('/users/{user}', function(User $user){
 
 Route::post('/login', [Registration::class,'login']);
 
-Route::prefix('/user')->middleware('auth')->group(function(){
-Route::post('/add', [TodoController::class, 'add'])->name('task.add');
+Route::prefix('/user')->middleware('auth:sanctum')->group(function(){
+Route::post('/add', [TodoController::class, 'create'])->name('task.add');
+Route::patch('/todos/{id}', [TodoController::class,'update'])->name('task.update');
 
 });
