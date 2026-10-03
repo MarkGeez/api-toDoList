@@ -59,4 +59,22 @@ class TodoController extends Controller
             "description"=> $todo->description
         ]);
    }
+
+   public function delete($id){
+    $todo = Todos::findOrFail($id);
+
+    $user= auth()->id();
+
+    if($user != $todo->user_id){
+            return response()->json([
+                "message" => "unauthorized"
+            ],403);
+        }
+
+    $todo->delete();
+
+    return response()->json([
+        "message" => "deleted"
+    ], 204);
+   }
 }
