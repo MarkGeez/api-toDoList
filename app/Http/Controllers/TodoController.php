@@ -8,6 +8,13 @@ use App\Models\Todos;
 
 class TodoController extends Controller
 {
+
+     private function findTodos($id){
+    $todo = Todos::findOrFail($id);
+
+
+    return $todo;
+}
    public function create(Request $request){
     $data = $request->validate([
         "title" => "required|string",
@@ -38,16 +45,7 @@ class TodoController extends Controller
         "title"=> "string",
         "description"=> "string"]);
 
-        $todo = Todos::findOrFail($id);
-
-        $user= $request->user()->id;
-
-        if($user != $todo->user_id){
-            return response()->json([
-                "message" => "unauthorized"
-            ],403);
-        }
-
+        $todo = $this->findTodos($id);
         $todo->update([
             "title" => $data["title"],
             "description"=> $data["description"],
@@ -61,20 +59,37 @@ class TodoController extends Controller
    }
 
    public function delete($id){
-    $todo = Todos::findOrFail($id);
+    
+    $todo = $this->findTodos($id);
 
-    $user= auth()->id();
 
-    if($user != $todo->user_id){
-            return response()->json([
-                "message" => "unauthorized"
-            ],403);
-        }
-
+    if (auth()->id() != $todo->user_id) {
+        return response()->json([
+            "message" => "unauthorized"
+        ], 403);
+    }
     $todo->delete();
 
     return response()->json([
         "message" => "deleted"
     ], 204);
+
+
+   
    }
+    public function view(Request $request){
+    $limit = $request->input("limit", 10);
+
+    $todo = Todos::where('user_id', auth()->user()->id)->paginate($limit, [
+        "id", "title", "description"
+    ]);
+
+    return response()->json([
+        "data" => $todo->items(),
+        "page" =>$todo->currentPage(),
+        "limit" => $todo->perPage(),
+        "total" => $todo->total()
+    ]);
+    }
 }
+ 
